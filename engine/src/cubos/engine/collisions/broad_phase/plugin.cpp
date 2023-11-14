@@ -1,6 +1,8 @@
 
 #include "plugin.hpp"
 
+#include <cubos/core/ecs/entity/entity.hpp>
+
 #include <cubos/engine/collisions/broad_phase/candidates.hpp>
 #include <cubos/engine/collisions/collider.hpp>
 #include <cubos/engine/collisions/shapes/box.hpp>
@@ -9,6 +11,7 @@
 
 #include "sweep_and_prune.hpp"
 
+using cubos::core::ecs::Entity;
 using cubos::core::ecs::OptRead;
 using cubos::core::ecs::Query;
 using cubos::core::ecs::Read;
@@ -22,8 +25,26 @@ static void trackNewCollidersSystem(Query<Read<Collider>> query, Write<BroadPhas
     {
         if (collider->fresh == 0)
         {
-            sweepAndPrune->addEntity(entity);
+            for (auto& markers : sweepAndPrune->markersPerAxis)
+            {
+                markers.push_back({entity, true});
+                markers.push_back({entity, false});
+            }
         }
+    }
+}
+
+/// @brief Untracks all removed colliders.
+static void untrackRemovedCollidersSystem(Query<Read<Collider>> query, Write<BroadPhaseSweepAndPrune> sweepAndPrune)
+{
+    for (auto& markers : sweepAndPrune->markersPerAxis)
+    {
+        std::erase_if(markers, [&query](auto const& marker) { return !query[marker.entity]; });
+    }
+
+    for (auto& active : sweepAndPrune->activePerAxis)
+    {
+        std::erase_if(active, [&query](auto const& entity) { return !query[entity]; });
     }
 }
 
@@ -183,6 +204,7 @@ void cubos::engine::broadPhaseCollisionsPlugin(Cubos& cubos)
     cubos.addResource<BroadPhaseSweepAndPrune>();
 
     cubos.system(trackNewCollidersSystem).tagged("cubos.collisions.aabb.setup");
+    cubos.system(untrackRemovedCollidersSystem).tagged("cubos.collisions.aabb.setup");
 
     cubos.system(updateAABBsSystem)
         .tagged("cubos.collisions.aabb.update")

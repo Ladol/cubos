@@ -53,7 +53,6 @@ set(CUBOS_ENGINE_SOURCE
     "src/cubos/engine/collisions/shapes/box.cpp"
     "src/cubos/engine/collisions/shapes/capsule.cpp"
     "src/cubos/engine/collisions/broad_phase/plugin.cpp"
-    "src/cubos/engine/collisions/broad_phase/sweep_and_prune.cpp"
     "src/cubos/engine/collisions/broad_phase/candidates.cpp"
 
     "src/cubos/engine/physics/plugin.cpp"
