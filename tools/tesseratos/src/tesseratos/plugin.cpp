@@ -4,6 +4,7 @@
 #include <tesseratos/plugin.hpp>
 #include <tesseratos/scene_editor/plugin.hpp>
 #include <tesseratos/settings_inspector/plugin.hpp>
+#include <tesseratos/themes/plugin.hpp>
 #include <tesseratos/voxel_palette_editor/plugin.hpp>
 #include <tesseratos/world_inspector/plugin.hpp>
 
@@ -16,4 +17,5 @@ void tesseratos::plugin(cubos::engine::Cubos& cubos)
     cubos.addPlugin(assetExplorerPlugin);
     cubos.addPlugin(debugCameraPlugin);
     cubos.addPlugin(settingsInspectorPlugin);
+    cubos.addPlugin(themesPlugin);
 }
