@@ -43,25 +43,46 @@ void cubos::engine::renderPickerPlugin(Cubos& cubos)
 
                     auto& rd = window->renderDevice();
 
-                    renderPicker.backTexture = rd.createTexture2D(desc);
-                    renderPicker.frontTexture = rd.createTexture2D(desc);
+                    renderPicker.texture = rd.createTexture2D(desc);
 
-                    // Since copyTo outputs only RGBA data with 4 bytes per channel, we need to allocate 16 bytes per
-                    // pixel.
-                    renderPicker.pixelBuffer = rd.createPixelPackBuffer(desc.width * desc.height * 4 * 4);
+                    // TODO: dedup this code
+                    renderPicker.pixelBuffers.clear();
+                    renderPicker.currentPixelBuffer = 0;
+                    for (int i = 0; i < renderPicker.numPixelBuffers; i++)
+                    {
+                        // Since copyTo outputs only RGBA data with 4 bytes per channel, we need to allocate 16 bytes
+                        // per pixel.
+                        renderPicker.pixelBuffers.push_back(
+                            rd.createPixelPackBuffer(renderPicker.size.x * renderPicker.size.y * 4 * 4));
+                    }
 
                     CUBOS_INFO("Resized RenderPicker to {}x{}", renderPicker.size.x, renderPicker.size.y);
                 }
-
-                // Swap textures
-                std::swap(renderPicker.backTexture, renderPicker.frontTexture);
+                else if (renderPicker.pixelBuffers.size() != static_cast<size_t>(renderPicker.numPixelBuffers))
+                {
+                    // TODO: dedup this code
+                    auto& rd = window->renderDevice();
+                    renderPicker.pixelBuffers.clear();
+                    renderPicker.currentPixelBuffer = 0;
+                    for (int i = 0; i < renderPicker.numPixelBuffers; i++)
+                    {
+                        // Since copyTo outputs only RGBA data with 4 bytes per channel, we need to allocate 16 bytes
+                        // per pixel.
+                        renderPicker.pixelBuffers.push_back(
+                            rd.createPixelPackBuffer(renderPicker.size.x * renderPicker.size.y * 4 * 4));
+                    }
+                }
 
                 // Copy the back texture to the pixel buffer.
-                if (renderPicker.backTexture != nullptr)
+                renderPicker.currentPixelBuffer++;
+                if (renderPicker.currentPixelBuffer == renderPicker.numPixelBuffers)
                 {
-                    renderPicker.backTexture->copyTo(0, 0, renderPicker.size.x, renderPicker.size.y,
-                                                     renderPicker.pixelBuffer);
+                    renderPicker.currentPixelBuffer = 0;
                 }
+                size_t copyIndex = renderPicker.currentPixelBuffer == 0 ? renderPicker.numPixelBuffers - 1
+                                                                        : renderPicker.currentPixelBuffer - 1;
+                renderPicker.texture->copyTo(0, 0, renderPicker.size.x, renderPicker.size.y,
+                                             renderPicker.pixelBuffers[copyIndex]);
 
                 // New frame, hint that the front texture needs to be cleared.
                 renderPicker.cleared = false;

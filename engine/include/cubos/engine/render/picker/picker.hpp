@@ -27,17 +27,15 @@ namespace cubos::engine
         /// @brief Whether the RenderPicker front texture has already been cleared this frame.
         bool cleared = false;
 
-        /// @brief Picking back texture, stores entity/gizmo ids for each pixel on the screen. Access to the
-        /// picker results is made through this texture, to ensure the CPU doesn't wait for the current frame to finish.
-        core::gl::Texture2D backTexture{nullptr};
-
-        /// @brief Picking front texture, stores entity/gizmo ids for each pixel on the screen. This is the texture
-        /// used by the renderer to write ids. It is automatically swapped with the back texture by the
-        /// @ref renderPickerPlugin.
-        core::gl::Texture2D frontTexture{nullptr};
+        /// @brief Picking texture, stores entity/gizmo ids for each pixel on the screen.
+        core::gl::Texture2D texture{nullptr};
 
         /// @brief Pixel pack buffer used to access the data in the @ref backTexture.
-        core::gl::PixelPackBuffer pixelBuffer{nullptr};
+        std::vector<core::gl::PixelPackBuffer> pixelBuffers;
+
+        int numPixelBuffers = 3;
+
+        int currentPixelBuffer = 0;
 
         /// @brief Reads the identifier at the given pixel coordinates.
         /// @note Must be called on the render device thread.

@@ -23,6 +23,6 @@ uint32_t cubos::engine::RenderPicker::read(unsigned int x, unsigned int y) const
 
     // The pixel pack buffer holds data in the RGBA32UInt format.
     glm::uvec4 pixel;
-    this->pixelBuffer->copyTo(&pixel, (y * this->size.x + x) * 16U, 16U);
+    this->pixelBuffers[this->currentPixelBuffer]->copyTo(&pixel, (y * this->size.x + x) * 16U, 16U);
     return (pixel.r << 16U) | pixel.g;
 }

@@ -180,7 +180,7 @@ void cubos::engine::gBufferRasterizerPlugin(Cubos& cubos)
             {
                 // Check if we need to recreate the framebuffer.
                 if (rasterizer.position != gBuffer.position || rasterizer.normal != gBuffer.normal ||
-                    rasterizer.albedo != gBuffer.albedo || rasterizer.frontPicker != picker.frontTexture ||
+                    rasterizer.albedo != gBuffer.albedo || rasterizer.frontPicker != picker.texture ||
                     rasterizer.depth != depth.texture)
                 {
                     // Store textures so we can check if they change in the next frame.
@@ -188,7 +188,7 @@ void cubos::engine::gBufferRasterizerPlugin(Cubos& cubos)
                     rasterizer.normal = gBuffer.normal;
                     rasterizer.albedo = gBuffer.albedo;
                     rasterizer.depth = depth.texture;
-                    rasterizer.frontPicker = picker.frontTexture;
+                    rasterizer.frontPicker = picker.texture;
 
                     // Create the framebuffer.
                     FramebufferDesc desc{};
@@ -197,7 +197,7 @@ void cubos::engine::gBufferRasterizerPlugin(Cubos& cubos)
                     desc.targets[0].setTexture2DTarget(gBuffer.position);
                     desc.targets[1].setTexture2DTarget(gBuffer.normal);
                     desc.targets[2].setTexture2DTarget(gBuffer.albedo);
-                    desc.targets[3].setTexture2DTarget(picker.frontTexture);
+                    desc.targets[3].setTexture2DTarget(picker.texture);
                     rasterizer.frontFramebuffer = rd.createFramebuffer(desc);
 
                     CUBOS_INFO("Recreated GBufferRasterizer's front framebuffer");

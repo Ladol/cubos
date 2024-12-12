@@ -115,18 +115,18 @@ void cubos::engine::gizmosPlugin(Cubos& cubos)
             for (auto [targetEnt, target, picker, gizmosTarget] : targets)
             {
                 // Prepare a framebuffer for drawing to the picker texture, if necessary.
-                if (gizmosTarget.frontPicker != picker.frontTexture)
+                if (gizmosTarget.frontPicker != picker.texture)
                 {
                     std::swap(gizmosTarget.frontPicker, gizmosTarget.backPicker);
                     std::swap(gizmosTarget.frontFramebuffer, gizmosTarget.backFramebuffer);
                 }
-                if (gizmosTarget.frontPicker != picker.frontTexture)
+                if (gizmosTarget.frontPicker != picker.texture)
                 {
                     FramebufferDesc desc{};
                     desc.targetCount = 1;
-                    desc.targets[0].setTexture2DTarget(picker.frontTexture);
+                    desc.targets[0].setTexture2DTarget(picker.texture);
 
-                    gizmosTarget.frontPicker = picker.frontTexture;
+                    gizmosTarget.frontPicker = picker.texture;
                     gizmosTarget.frontFramebuffer = rd.createFramebuffer(desc);
                 }
 
