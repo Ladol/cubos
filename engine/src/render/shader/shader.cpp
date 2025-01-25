@@ -19,3 +19,8 @@ cubos::core::gl::ShaderStage Shader::shaderStage() const
 {
     return mShaderStage;
 }
+
+const ShaderBuilder& Shader::builder() const
+{
+    return mBuilder;
+}

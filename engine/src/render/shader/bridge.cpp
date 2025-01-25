@@ -20,7 +20,7 @@ bool ShaderBridge::loadFromFile(Assets& assets, const AnyAsset& handle, Stream& 
     }
 
     // Store the asset's data.
-    assets.store(handle, Shader(shaderStage));
+    assets.store(handle, Shader(shaderStage, mRenderDevice, mStage, contents));
     return true;
 }
 
