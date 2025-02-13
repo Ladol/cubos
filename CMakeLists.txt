@@ -8,6 +8,7 @@ include(GNUInstallDirs) # Get default install directories
 
 # ------------------------ Set global CMake variables -------------------------
 
+set(Python3_EXECUTABLE "E:/Cubos/cubos/venv/Scripts/python.exe" CACHE FILEPATH "Python executable")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)

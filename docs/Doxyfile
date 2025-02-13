@@ -25,7 +25,9 @@ EXTRACT_PRIVATE = YES
 EXTRACT_PRIV_VIRTUAL = YES
 RECURSIVE = YES
 OUTPUT_DIRECTORY = @DOXYGEN_OUTPUT_DIRECTORY@
+# Update IMAGE_PATH to include the output directory
 IMAGE_PATH = @DOXYGEN_PROJECT_ROOT@/docs/images \
+             @DOXYGEN_OUTPUT_DIRECTORY@/html \
              @DOXYGEN_PROJECT_ROOT@/core/samples \
              @DOXYGEN_PROJECT_ROOT@/engine/samples \
              @DOXYGEN_PROJECT_ROOT@/api/core/samples \
@@ -50,7 +52,7 @@ STRIP_FROM_PATH = @DOXYGEN_PROJECT_ROOT@/core/include/cubos \
 
 # We use m.css to generate the html documentation, so we only need XML output
 GENERATE_XML = YES
-GENERATE_HTML = NO
+GENERATE_HTML = YES
 GENERATE_LATEX = NO
 XML_PROGRAMLISTING = NO
 XML_NS_MEMB_FILE_SCOPE = YES
